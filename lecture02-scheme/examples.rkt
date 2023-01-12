@@ -18,7 +18,9 @@
 ;
 
 (define (length xs)
-  'not-implemented)
+  (if (null? xs)
+      0
+      (+ 1 (length (rest xs)))))
 
 ;
 ; Compute the sum of a list of integers
@@ -27,7 +29,9 @@
 ;   (sum '(1 2 3 4)) => 10
 
 (define (sum xs)
-  'not-implemented)
+  (if (null? xs)
+      0
+      (+ (first xs) (sum (rest xs)))))
 
 ; Return the nth element of a list, counting from 0.
 ;
@@ -36,7 +40,9 @@
 ;  (nth 2 '(1 2 3)) => 3
 
 (define (nth n xs)
-  'not-implemented)
+  (if (= n 0)
+      (first xs)
+      (nth (- n 1) (rest xs))))
 
 ; Concatenate the lists l1 and l2 (append l2 to l1)
 ;   The concatention of l1 and l2 is equal to l2 if l1 is null.
@@ -49,7 +55,9 @@
 ;
 
 (define (concat xs ys)
-  'not-implemented)
+  (if (null? xs)
+      ys
+      (cons (first xs) (concat (rest xs) ys))))
 
 ; Count the number of integers in a list
 ;  The number of integers in an object that is an integer is 1.
@@ -64,7 +72,9 @@
 ; How can we handle nested lists that contain non-integers?
 
 (define (numints xs)
-  'not-implemented)
+  (cond [(integer? xs) 1]
+        [(null? xs)    0]
+        [else          (+ (numints (first xs)) (numints (rest xs)))]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generalizing inc-all
@@ -76,7 +86,9 @@
 ;  (inc-all '(1 2 3 4 5)) => '(2 3 4 5 6)
 
 (define (inc-all xs)
-  'not-implemented)
+  (if (null? xs)
+      null
+      (cons (+ 1 (first xs)) (inc-all (rest xs)))))
   
 ; Return a list containing all the elements of xs incremented by n
 ;
@@ -86,7 +98,9 @@
 ;   (add-n-all 1 '(1 2 3 4 5)) => '(2 3 4 5 6)
 
 (define (add-n-all n xs)
-  'not-implemented)
+  (if (null? xs)
+      null
+      (cons (+ n (first xs)) (add-n-all n (rest xs)))))
 
 ; Return a list containing all the elements of xs when passed as arguments to a
 ; function.
@@ -98,7 +112,9 @@
 ;
 
 (define (apply-all f xs)
-  'not-implemented)
+  (if (null? xs)
+      null
+      (cons (f (first xs)) (apply-all f (rest xs)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Higher Order Function Examples
