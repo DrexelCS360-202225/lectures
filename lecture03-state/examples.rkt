@@ -2,6 +2,32 @@
 (require racket/trace)
 (require "tree.rkt")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Higher Order Function Examples
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;
+; Define a function map that takes a function f and a list xs and returns a new
+; list consisting of the results of applying f to each element in xs.
+;
+; Example:
+;  (map (lambda (x) (+ x 1)) '(1 2 3)) => '(2 3 4)
+;
+
+(define (map f xs)
+  'not-implemented)
+
+;
+; Compute the sum of a list of integers
+;
+; Example:
+;   (sum '(1 2 3 4)) => 10
+
+(define (sum xs)
+  (if (null? xs)
+      0
+      (+ (first xs) (sum (rest xs)))))
+
 ;
 ; Calculate the squares of a list of integers. Make the function non-recursive.
 ;
@@ -42,19 +68,6 @@
 ;
 
 (define (reduce f z xs)
-  'not-implemented)
-
-; Compute the order of an object (maximum depth)
-;  The order of an atom is 0.
-;  The order of a list is 1 plus the maximum order of its elements.
-;
-; Example:
-;   (order '(1 (2 (3)) 4)) => 3
-;   (order '((()))) => 2
-;
-; How can we test for an atom?
-
-(define (order xs)
   'not-implemented)
 
 ;
