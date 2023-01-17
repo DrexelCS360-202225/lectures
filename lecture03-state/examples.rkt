@@ -1,6 +1,6 @@
 #lang racket
 (require racket/trace)
-
+(require "tree.rkt")
 
 ;
 ; Calculate the squares of a list of integers. Make the function non-recursive.
