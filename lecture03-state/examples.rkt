@@ -15,7 +15,9 @@
 ;
 
 (define (map f xs)
-  'not-implemented)
+  (if (null? xs)
+      null
+      (cons (f (first xs)) (map f (rest xs)))))
 
 ;
 ; Compute the sum of a list of integers
@@ -36,7 +38,7 @@
 ;
 
 (define (squares xs)
-  'not-implemented)
+  (map (lambda (x) (* x x)) xs))
 
 ;
 ; Calculate the sum of squares of a list of integers. Make the function non-recursive.
@@ -46,7 +48,7 @@
 ;
 
 (define (sum-of-squares xs)
-  'not-implemented)
+  (sum (squares xs)))
 
 ;
 ; Return a list containing only the elements of xs for which the predicate f
@@ -57,7 +59,10 @@
 ;
 
 (define (filter f xs)
-  'not-implemented)
+  (cond [(null? xs)     null]
+        [(f (first xs)) (cons (first xs) (filter f (rest xs)))]
+        [else           (filter f (rest xs))]))
+      
 
 ;
 ; Reduce a list of values to a single value by repeatedly application of a binary function. 
@@ -68,7 +73,10 @@
 ;
 
 (define (reduce f z xs)
-  'not-implemented)
+  (if (null? xs)
+      z
+      (f (car xs) (reduce f z (rest xs)))))
+  
 
 ;
 ; Write a non-recursive function that takes a list and returns all the even
@@ -84,19 +92,19 @@
 ; That is, ((compose f g) x) should be the same as (f (g x))
 
 (define (compose f g)
-  'not-implemented)
+  (lambda (x) (f (g x))))
 
 ; Write a function that partially applies a function to a single argument.
 ; That is, ((papply f x) y) should be the same as (f x y)
 
 (define (papply f x)
-  'not-implemented)
+  (lambda (y) (f x y)))
 
 ; Add one to a number
 ; Define using papply
 
 (define inc
-  'not-implemented)
+  (papply + 1))
 
 ;;
 ;; Folds
@@ -105,14 +113,18 @@
 ; Right fold
 
 (define (foldr f z xs)
-  'not-implemented)
+  (if (null? xs)
+      z
+      (f (first xs) (foldr f z (rest xs)))))
 
 ;; (show-tree (foldr (show-function 'cons) 'null '(1 2 3 4)))
 
 ; Left fold
 
 (define (foldl f z xs)
-  'not-implemented)
+  (if (null? xs)
+      z
+      (foldl f (f z (first xs)) (rest xs))))
 
 ;; (show-tree (foldl (show-function 'cons) 'null '(1 2 3 4)))
 
