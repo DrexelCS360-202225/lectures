@@ -2,7 +2,7 @@
 (require racket/trace)
 
 (define (enumerate-from n)
-  'undefined)
+  (cons n (enumerate-from (+ n 1))))
 
 (define (stream-enumerate-from n)
-  'undefined)
+  (stream-append (stream n) (stream-enumerate-from (+ n 1))))
