@@ -9,20 +9,25 @@ import Prelude hiding (map, take, drop)
 --
 
 data Nat = Zero | Succ Nat
+  deriving (Show)
 
 -- isNat :: Nat -> Bool
 
 nat2int :: Nat -> Int
-nat2int = error "nat2int: not yet defined"
+nat2int Zero     = 0
+nat2int (Succ n) = 1 + nat2int n
 
 int2nat :: Int -> Nat
-int2nat = error "int2nat: not yet defined"
+int2nat 0 = Zero
+int2nat n = Succ (int2nat (n-1))
 
 addCheat :: Nat -> Nat -> Nat
 addCheat m n = int2nat (nat2int m + nat2int n)
 
 add :: Nat -> Nat -> Nat
-add = error "add: not yet defined"
+add Zero               n = n
+add (Succ (Succ Zero)) n = Succ (Succ n)
+add (Succ m)           n = Succ (add m n)
 
 --
 -- Inductive definitions of lists
