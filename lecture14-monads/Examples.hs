@@ -37,13 +37,18 @@ instance Functor List where
 
 instance Functor Maybe where
     -- fmap :: (a -> b) -> Maybe a -> Maybe b
-    fmap = undefined
+    fmap _ Nothing  = Nothing
+    fmap f (Just x) = Just (f x)
 
 instance Functor Tree where
-    -- fmap :: (a -> b) -> Tree a -> Tree b
-    fmap = undefined
+   -- map :: (a -> b) -> Tree a -> Tree b
+   fmap f (Leaf x)   = Leaf (f x)
+   fmap f (Node l r) = Node (fmap f l) (fmap f r)
 
--- instance Functor Either... where
+instance Functor (Either a) where
+    -- fmap :: (b -> c) -> Either a b -> Either a c
+    fmap _ (Left x)  = Left x
+    fmap f (Right x) = Right (f x)
 
 --
 -- Applicatives
@@ -51,10 +56,15 @@ instance Functor Tree where
 
 instance Applicative Maybe where
     -- pure :: a -> Maybe a
-    pure = undefined
+    pure x = Just x
 
     -- (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
-    (<*>) = undefined
+    Nothing  <*> _ = Nothing
+    (Just f) <*> x = fmap f x
+{-
+    (Just f) <*> Nothing  = Nothing
+    (Just f) <*> (Just x) = Just (f x)
+-}
 
 {-
 instance Applicative [] where
@@ -96,7 +106,8 @@ eval' (Div x y) = case eval' x of
 
 instance Monad Maybe where
   -- (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
-  (>>=) = undefined
+  Nothing >>= _ = Nothing
+  Just x  >>= f = f x
 
 eval'' :: Exp -> Maybe Int
 eval'' (Const n) = Just n
@@ -143,22 +154,35 @@ runState :: State s a -> s -> (a, s)
 runState (State f) = f
 
 instance Functor (State s) where
-    fmap f m = undefined
+    fmap f m = State $ \s -> let (x, s') = runState m s
+                             in
+                               (f x, s')
 
 instance Applicative (State s) where
-    pure x = undefined
+    pure x = State $ \s -> (x, s)
 
-    mf <*> mx = undefined
+    mf <*> mx = State $ \s -> let (f, s')  = runState mf s
+                                  (x, s'') = runState mx s'
+                              in
+                                (f x, s'')
 
 instance Monad (State s) where
-    mx >>= f = undefined
+    mx >>= f = State $ \s -> let (x, s') = runState mx s
+                             in
+                               runState (f x) s'
 
 --
 -- Generic functions
 --
 
 mapM :: Monad m => (a -> m b) -> [a] -> m [b]
-mapM = undefined
+mapM _ []     = return []
+mapM f (x:xs) = do y  <- f x
+                   ys <- mapM f xs
+                   return (y:ys)
 
 filterM :: Monad m => (a -> m Bool) -> [a] -> m [a]
-filterM = undefined
+filterM _ []     = return []
+filterM p (x:xs) = do b  <- p x
+                      ys <- filterM p xs
+                      return (if b then x:ys else ys)
